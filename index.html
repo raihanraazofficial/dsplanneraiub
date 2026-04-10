@@ -722,8 +722,14 @@ function CCard({c,i,facMap,off,meta}){
   const tm=c.items.reduce((s,it)=>s+it.sec.schedules.reduce((ss,sc)=>ss+(pt(sc.end)-pt(sc.start)),0),0);
   const altSecsForSlot=useCallback((sl)=>{
     const alts=(off||[]).filter(s=>{
-      if(norm(s.title)!==norm(sl.n))return false;
-      return (s.schedules||[]).some(sc=>sc.day===sl.day&&sc.start===sl.start&&sc.end===sl.end);
+      const n1=norm(s.title),n2=norm(sl.n);
+      const sameCourse=n1===n2||n1.includes(n2)||n2.includes(n1);
+      if(!sameCourse)return false;
+      return (s.schedules||[]).some(sc=>{
+        const d1=String(sc.day||'').trim().toLowerCase();
+        const d2=String(sl.day||'').trim().toLowerCase();
+        return d1===d2&&pt(sc.start)===pt(sl.start)&&pt(sc.end)===pt(sl.end);
+      });
     }).map(s=>{
       const section=String(s.section||'').trim();
       const cap=+s.capacity||0;
