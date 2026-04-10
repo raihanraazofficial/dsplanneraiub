@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIUB DS Academic Planner</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#05080f;--b1:#0b1120;--b2:#111a2e;--b3:#182344;--b4:#1e2d52;--bd:#1e3055;--bd2:#2a4070;--t1:#f0f4fc;--t2:#b0bdd4;--t3:#6b7fa0;--t4:#3d5278;--ac:#4f9cf7;--ac2:#6366f1;--ac3:#8b5cf6;--gn:#10b981;--gn2:#059669;--yw:#f59e0b;--og:#f97316;--rd:#ef4444;--pk:#ec4899;--cy:#06b6d4;--f:'DM Sans',system-ui,sans-serif;--m:'JetBrains Mono',monospace;--r:8px;--r2:12px}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}body{font-family:var(--f);background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.55;font-size:14px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--b1)}::-webkit-scrollbar-thumb{background:var(--b4);border-radius:4px}::selection{background:var(--ac);color:var(--bg)}
+.top{background:rgba(11,17,32,.88);border-bottom:1px solid var(--bd);padding:0 24px;height:54px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(16px)}
+.logo{font-weight:700;font-size:17px;background:linear-gradient(135deg,var(--ac),var(--ac3));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.logo-s{font-size:12px;color:var(--t3);margin-left:-8px;white-space:nowrap}
+.nav{display:flex;gap:2px;margin-left:auto;background:var(--bg);padding:3px;border-radius:var(--r)}
+.nb{padding:7px 14px;border-radius:6px;border:none;background:0;color:var(--t3);font-family:var(--f);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}.nb:hover{color:var(--t1)}.nb.on{background:var(--ac);color:#fff}
+.cnt{max-width:1440px;margin:0 auto;padding:20px 24px 60px}
+.cd{background:var(--b2);border:1px solid var(--bd);border-radius:var(--r2);padding:20px;margin-bottom:16px;position:relative;overflow:hidden}
+.cd::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,156,247,.12),transparent)}
+.ct{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}.cs{font-size:12.5px;color:var(--t3);margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--bd);background:var(--b3);color:var(--t1);font-family:var(--f);font-size:13px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap}.btn:hover{background:var(--b4);border-color:var(--bd2)}.btn:active{transform:scale(.97)}
+.bp{background:var(--ac);color:#fff;border-color:var(--ac)}.bp:hover{background:#6ab0fa}.bg2{background:var(--gn2);color:#fff;border-color:var(--gn2)}.bg2:hover{background:var(--gn)}.brd{background:rgba(239,68,68,.12);color:var(--rd);border-color:rgba(239,68,68,.25)}.bs{padding:5px 10px;font-size:12px}.bgh{background:0;border-color:transparent}.bgh:hover{background:var(--b3)}
+.inp{padding:8px 12px;border-radius:var(--r);border:1px solid var(--bd);background:var(--bg);color:var(--t1);font-family:var(--f);font-size:13px;outline:0;transition:border .15s;width:100%}.inp:focus{border-color:var(--ac)}.inp::placeholder{color:var(--t4)}
+select.inp{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7fa0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.b{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600;font-family:var(--m);letter-spacing:-.2px}
+.bb{background:rgba(79,156,247,.12);color:var(--ac)}.bgb{background:rgba(16,185,129,.12);color:var(--gn)}.byb{background:rgba(245,158,11,.12);color:var(--yw)}.brb{background:rgba(239,68,68,.12);color:var(--rd)}.bpb{background:rgba(139,92,246,.12);color:var(--ac3)}.bpkb{background:rgba(236,72,153,.12);color:var(--pk)}.bob{background:rgba(249,115,22,.12);color:var(--og)}.bcb{background:rgba(6,182,212,.12);color:var(--cy)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:1024px){.g3,.g4{grid-template-columns:1fr 1fr}}@media(max-width:768px){.g2,.g3,.g4{grid-template-columns:1fr}.top{padding:0 10px;gap:8px}.cnt{padding:12px}.logo-s{display:none}.nav{overflow-x:auto}.nb{padding:6px 10px;font-size:11px}}
+.chk{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;cursor:pointer;transition:background .12s;user-select:none}.chk:hover{background:rgba(79,156,247,.05)}.chk input[type=checkbox]{accent-color:var(--ac);width:15px;height:15px;cursor:pointer;flex-shrink:0}.chk.dn{opacity:.4}.chk.dn span{text-decoration:line-through}
+.pb{height:6px;background:var(--b4);border-radius:3px;overflow:hidden}.pf{height:100%;border-radius:3px;transition:width .4s}
+.tag{display:inline-block;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;user-select:none;margin:2px}.ton{background:var(--ac);color:#fff}.tof{background:var(--b3);color:var(--t3);border:1px solid var(--bd)}.tof:hover{background:var(--b4)}
+.uz{border:2px dashed var(--bd2);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}.uz:hover{border-color:var(--ac);background:rgba(79,156,247,.03)}.uz.ok{border-style:solid;border-color:var(--gn);background:rgba(16,185,129,.03)}.uz input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.tip{position:fixed;background:var(--b2);border:1px solid var(--ac);border-radius:var(--r);padding:10px 14px;font-size:12px;z-index:999;max-width:300px;box-shadow:0 4px 24px rgba(0,0,0,.4);pointer-events:none}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px}.tbl th{background:var(--b3);padding:8px 10px;text-align:left;font-weight:600;border-bottom:2px solid var(--bd)}.tbl td{padding:7px 10px;border-bottom:1px solid rgba(30,48,85,.4);vertical-align:top}.tbl tr:hover td{background:rgba(79,156,247,.03)}
+.sblk{padding:5px 8px;border-radius:5px;margin:2px 0;font-size:11px;border-left:3px solid}
+.st{text-align:center;padding:16px}.stn{font-size:28px;font-weight:700;font-family:var(--m);letter-spacing:-1px}.stl{font-size:11px;color:var(--t3);margin-top:2px}
+.rc{background:var(--b3);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:10px;overflow:hidden;transition:border-color .15s}.rc:hover{border-color:var(--bd2)}
+.rh{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.rb{padding:0 16px 16px;border-top:1px solid var(--bd)}
+.emp{text-align:center;padding:40px 20px;color:var(--t3)}.empi{font-size:40px;margin-bottom:8px;opacity:.3}
+.mm{width:100%;overflow:auto;background:var(--bg);border-radius:var(--r2);border:1px solid var(--bd)}.mm svg text{font-family:var(--m)}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.an{animation:fu .3s ease-out both}
+.fac-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:3px;font-size:10px;background:rgba(6,182,212,.1);color:var(--cy);margin:1px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="text/babel">
+const{useState,useEffect,useMemo,useCallback}=React;
+const SC=['#ef4444','#f97316','#f59e0b','#10b981','#4f9cf7','#6366f1','#8b5cf6','#ec4899'];
+const CC=['#4f9cf7','#10b981','#f59e0b','#ec4899','#8b5cf6','#f97316','#06b6d4','#ef4444','#a855f7','#14b8a6'];
+const DO=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const TC=148;
+
+// CURRICULUM
+const SM=[
+{s:1,c:[{code:"CSC1101",n:"Introduction to Computer Studies",cr:1,p:[]},{code:"CSC1102",n:"Introduction to Programming",cr:3,p:[]},{code:"CSC1103",n:"Introduction to Programming Lab",cr:1,p:[]},{code:"MAT1102",n:"Diff Calculus and Coordinate Geometry",cr:3,p:[]},{code:"PHY1101",n:"Physics 1",cr:3,p:[]},{code:"PHY1102",n:"Physics 1 Lab",cr:1,p:[]},{code:"ENG1101",n:"English Reading Skills & Public Speaking",cr:3,p:[]},{code:"BAS2101",n:"Bangladesh Studies",cr:3,p:[]}]},
+{s:2,c:[{code:"BSE1201",n:"OOP 1 (Java)",cr:3,p:["CSC1102","CSC1103"]},{code:"CSC1204",n:"Discrete Mathematics",cr:3,p:[]},{code:"BBA1102",n:"Principles of Accounting",cr:3,p:[]},{code:"MAT1205",n:"Integral Calculus & Ord. Diff Equation",cr:3,p:["MAT1102"]},{code:"CSC1205",n:"Data Structure",cr:3,p:["CSC1102","CSC1103"]},{code:"CSC1206",n:"Data Structure Lab",cr:1,p:["CSC1102","CSC1103"]},{code:"ENG1202",n:"English Writing Skills & Communications",cr:3,p:["ENG1101"]}]},
+{s:3,c:[{code:"BDS2102",n:"Introduction to Data Science",cr:3,p:["CSC1205","CSC1206"]},{code:"BDS2101",n:"Introduction to Database",cr:3,p:["CSC1205","CSC1206"]},{code:"ECO3150",n:"Principles of Economics",cr:2,p:[]},{code:"CSC2107",n:"Algorithms",cr:3,p:["CSC1205","CSC1206"]},{code:"MAT2101",n:"Complex Variable, Laplace & Z-Transform",cr:3,p:["MAT1205"]},{code:"BSE3106",n:"OOP 2",cr:3,p:["BSE1201","BDS2101"]},{code:"BSE2102",n:"OO Analysis and Design",cr:3,p:["BDS2101"]}]},
+{s:4,c:[{code:"CNE2204",n:"Web Technologies",cr:3,p:["BSE1201"]},{code:"CNE2202",n:"Operating Systems",cr:3,p:["CSC2107"]},{code:"BSE2203",n:"Software Engineering",cr:3,p:["BSE2102"]},{code:"MAT3103",n:"Computational Statistics & Probability",cr:3,p:["MAT2101"]},{code:"MAT2202",n:"Matrices, Vectors, Fourier Analysis",cr:3,p:["MAT2101"]},{code:"BDS2203",n:"Data Processing",cr:3,p:["BDS2102"]}]},
+{s:5,c:[{code:"COE3205",n:"Computer Organization & Architecture",cr:3,p:["CNE2202"]},{code:"CSC3210",n:"AI and Expert System",cr:3,p:["CSC2107","MAT3103"]},{code:"MAT3101",n:"Numerical Methods for Sci & Eng",cr:3,p:["MAT2202"]},{code:"ENG2103",n:"Business Communication",cr:3,p:["BAS2101"]},{code:"BDS3104",n:"Data Privacy, Security & Protection",cr:3,p:["BDS2203"]},{code:"BDS3105",n:"Statistical and Data Analysis",cr:3,p:["BDS2203","MAT3103"]},{code:"BDS3208",n:"Data Visualization",cr:3,p:["BDS2203"]}]},
+{s:6,c:[{code:"BDS4110",n:"Data Warehousing & Data Mining",cr:3,p:["BDS2101","CSC3210"]},{code:"CNE3213",n:"Intro to Network Engineering",cr:3,p:["CNE2202"]},{code:"CNE3214",n:"Network Engineering Lab",cr:1,p:["CNE2202"]},{code:"BDS3106",n:"Programming for Data Science",cr:3,p:["BSE1201"]},{code:"BDS3207",n:"Ethics in Data Science & Eng",cr:3,p:["BDS3104"]},{code:"DS_M1",n:"DS Major 1",cr:3,p:[],t:"major"},{code:"DS_M2",n:"DS Major 2",cr:3,p:[],t:"major"}]},
+{s:7,c:[{code:"CSC4197",n:"Research Methodology",cr:3,p:[]},{code:"BSE4112",n:"Programming in Python",cr:3,p:["BSE1201"]},{code:"BDS4109",n:"Big Data Architecture",cr:3,p:["BDS3208"]},{code:"BDS4112",n:"Machine Learning & Expert Systems",cr:3,p:["CSC3210"]},{code:"DS_M3",n:"DS Major 3",cr:3,p:[],t:"major"},{code:"DS_M4",n:"DS Major 4",cr:3,p:[],t:"major"},{code:"DS_M5",n:"DS Major 5",cr:3,p:[],t:"major"}]},
+{s:8,c:[{code:"CSC4299",n:"Internship",cr:3,p:[]},{code:"CSC4298",n:"Project & Thesis",cr:3,p:["CSC4197"]},{code:"DS_E1",n:"DS Elective 1",cr:3,p:[],t:"elective"},{code:"DS_E2",n:"DS Elective 2",cr:3,p:[],t:"elective"}]}
+];
+
+// UTILS
+function pt(t){if(!t)return 0;const m=t.match(/(\d+):(\d+)\s*(AM|PM)/i);if(!m)return 0;let h=+m[1],mn=+m[2];if(m[3].toUpperCase()==='PM'&&h!==12)h+=12;if(m[3].toUpperCase()==='AM'&&h===12)h=0;return h*60+mn}
+function tovl(a,b){return pt(a.start)<pt(b.end)&&pt(b.start)<pt(a.end)}
+function ac(){const r=[];SM.forEach(s=>s.c.forEach(c=>r.push({...c,s:s.s})));return r}
+function useLS(k,d){const[v,sv]=useState(()=>{try{const x=localStorage.getItem(k);return x?JSON.parse(x):d}catch{return d}});useEffect(()=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},[k,v]);return[v,sv]}
+function norm(s){
+  const x=(s||'')
+    .replace(/\bOOP\b/ig,'OBJECT ORIENTED PROGRAMMING')
+    .replace(/\bOBJ(ECT)?\s*ORIENTED\s*PROG(RAMMING)?\b/ig,'OBJECT ORIENTED PROGRAMMING');
+  return x.toUpperCase().replace(/[^A-Z0-9 ]/g,'').replace(/\s+/g,' ').trim();
+}
+function mc(course,off){
+  return off.filter(o=>{
+    // Priority 1: Course Code Match
+    if(o.code&&course.code){
+      if(String(o.code).toUpperCase()===String(course.code).toUpperCase())return true;
+    }
+    // Priority 2: Title match (flexible)
+    const n=norm(course.n);
+    const on=norm(o.title);
+    return on.includes(n)||n.includes(on);
+  })
+}
+
+function calcGap(routine){
+  let gap=0;
+  const days={};
+  routine.items.forEach(it=>{
+    it.sec.schedules.forEach(sc=>{
+      if(!days[sc.day])days[sc.day]=[];
+      days[sc.day].push(sc);
+    });
+  });
+  Object.values(days).forEach(arr=>{
+    arr.sort((a,b)=>pt(a.start)-pt(b.start));
+    for(let i=1;i<arr.length;i++){
+      gap+=pt(arr[i].start)-pt(arr[i-1].end);
+    }
+  });
+  return gap;
+}
+
+// Parse XLSX
+function parseXLSX(wb){
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const json=XLSX.utils.sheet_to_json(ws,{header:1});
+
+  let hi=0;
+  for(let i=0;i<10;i++){
+    if(json[i]&&json[i].some(c=>String(c||'').toLowerCase().includes('course'))){
+      hi=i;break;
+    }
+  }
+
+  const hdr=json[hi]||[];
+  const cm={};
+
+  hdr.forEach((h,i)=>{
+    const l=String(h||'').toLowerCase();
+
+    if(l.includes('class id'))cm.id=i;
+    if(l.includes('course code'))cm.code=i;
+    if(l.includes('course title'))cm.ti=i;
+    if(l.includes('section'))cm.se=i;
+    if(l.includes('type'))cm.ty=i;
+    if(l.includes('day'))cm.dy=i;
+    if(l.includes('start'))cm.st=i;
+    if(l.includes('end'))cm.en=i;
+    if(l.includes('room'))cm.rm=i;
+    if(l.includes('capacity'))cm.ca=i;
+    if(l.includes('count'))cm.count=i;
+    if(l.includes('status'))cm.status=i;
+    if(l.includes('faculty'))cm.fa=i;
+  });
+
+  const mp={};
+  const semName=wb.SheetNames[0]||'';
+
+  for(let i=hi+1;i<json.length;i++){
+    const r=json[i];
+    if(!r||!r[cm.ti])continue;
+
+    const id=String((cm.id!=null?r[cm.id]:null)??i);
+    const rawTitle=String(r[cm.ti]||'');
+    const title=rawTitle.replace(/\s*\[[^\]]+\]\s*$/,'').trim();
+
+    if(!mp[id]){
+      mp[id]={
+        id,
+        code:String(r[cm.code]||''),
+        title,
+        section:String(r[cm.se]||''),
+        type:String(r[cm.ty]||''),
+        room:String(r[cm.rm]||''),
+        capacity:+r[cm.ca]||0,
+        count:+r[cm.count]||0,
+        status:String(r[cm.status]||''),
+        faculty:String(r[cm.fa]||''),
+        schedules:[]
+      }
+    }
+    // keep best-known values if later rows are missing them
+    if(!mp[id].code)mp[id].code=String(r[cm.code]||'');
+    if(!mp[id].room)mp[id].room=String(r[cm.rm]||'');
+    if(!mp[id].faculty)mp[id].faculty=String(r[cm.fa]||'');
+    if(!mp[id].status)mp[id].status=String(r[cm.status]||'');
+    if(!mp[id].capacity)mp[id].capacity=+r[cm.ca]||0;
+    if(!mp[id].count)mp[id].count=+r[cm.count]||0;
+
+    mp[id].schedules.push({
+      day:String(r[cm.dy]||''),
+      start:String(r[cm.st]||''),
+      end:String(r[cm.en]||'')
+    });
+  }
+
+  return{sections:Object.values(mp),semester:semName};
+}
+
+// Parse exam PDF using pdf.js
+async function parseExamPDF(file){
+  const buf=await file.arrayBuffer();
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let fullText='';
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const tc=await page.getTextContent();
+    fullText+=tc.items.map(it=>it.str).join(' ')+'\n';
+  }
+  // Parse structure
+  const days=[];let curDay=null,curSlot=null;
+  const dayRe=/Day\s*(\d+)\s*:\s*([A-Za-z]+\s+\d+,?\s*\d{4})\s*\(\s*(\w+)\s*\)/gi;
+  const slotRe=/(Slot\s*\d+:\s*)?(\d{1,2}:\d{2}\s*[AP]M)\s*[-–]\s*(\d{1,2}:\d{2}\s*[AP]M)/gi;
+  const lines=fullText.split(/\n/);
+  for(const line of lines){
+    const dm=[...line.matchAll(dayRe)];
+    for(const m of dm){curDay={day:`Day ${m[1]}`,date:m[2].trim(),dayName:m[3],slots:[]};days.push(curDay)}
+    const sm=[...line.matchAll(slotRe)];
+    for(const m of sm){if(curDay){curSlot={time:`${m[2]} - ${m[3]}`,courses:[]};curDay.slots.push(curSlot)}}
+  }
+  // Extract course names from full text between slot markers
+  const courseRe=/([A-Z][A-Z &,.\-:()\/\d]{4,60})\s+(?:[A-Z],|[A-Z]\d|[A-Z]\[)/g;
+  const allCourses=[...fullText.matchAll(courseRe)].map(m=>m[1].trim());
+  // Assign courses to days/slots based on position in text
+  const textParts=fullText.split(/Day\s+\d+\s*:/i);
+  for(let di=0;di<days.length;di++){
+    const dayText=textParts[di+1]||'';
+    const slotTexts=dayText.split(/(?:Slot\s*\d+:\s*)?(?:\d{1,2}:\d{2}\s*[AP]M\s*[-–]\s*\d{1,2}:\d{2}\s*[AP]M)/i);
+    for(let si=0;si<days[di].slots.length;si++){
+      const st=slotTexts[si+1]||'';
+      const names=st.match(/([A-Z][A-Z &,.\-:()'\/\d]{3,})/g)||[];
+      const cleaned=names.filter(n=>n.length>4&&!n.match(/^(TIME|COURSE|TITLE|SECTIONS|VENUE|Page|Date|All|Annexes|AMERICAN)/)).map(n=>n.trim());
+      days[di].slots[si].courses=cleaned;
+    }
+  }
+  return days;
+}
+
+// Build faculty prediction map from historical data
+function buildFacultyMap(histSections){
+  const map={};// courseName -> {overall:{faculty:count}, bySection:{section:{faculty:count}}}
+  for(const sec of histSections){
+    if(!sec.faculty)continue;
+    const n=norm(sec.title);
+    const section=String(sec.section||'').trim();
+    if(!map[n])map[n]={overall:{},bySection:{}};
+    map[n].overall[sec.faculty]=(map[n].overall[sec.faculty]||0)+1;
+    if(section){
+      if(!map[n].bySection[section])map[n].bySection[section]={};
+      map[n].bySection[section][sec.faculty]=(map[n].bySection[section][sec.faculty]||0)+1;
+    }
+  }
+  return map;
+}
+
+function getFacultyPrediction(courseName,facMap){
+  const n=norm(courseName);
+  // Try exact match first, then partial
+  let entry=facMap[n];
+  if(!entry){for(const k in facMap){if(k.includes(n)||n.includes(k)){entry=facMap[k];break}}}
+  if(!entry)return[];
+  const pool=entry.overall||{};
+  const total=Object.values(pool).reduce((s,v)=>s+v,0)||0;
+  return Object.entries(pool).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([f,c])=>({name:f,count:c,total,confidence:total?c/total:0}));
+}
+
+function getFacultyPredictionForSection(courseName,section,facMap){
+  const n=norm(courseName);
+  let entry=facMap[n];
+  if(!entry){for(const k in facMap){if(k.includes(n)||n.includes(k)){entry=facMap[k];break}}}
+  if(!entry)return[];
+  const s=String(section||'').trim();
+  const pool=(entry.bySection&&entry.bySection[s])?entry.bySection[s]:(entry.overall||{});
+  const total=Object.values(pool).reduce((x,v)=>x+v,0)||0;
+  return Object.entries(pool).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([f,c])=>({name:f,count:c,total,confidence:total?c/total:0}));
+}
+
+// ═══ APP ═══
+function App(){
+  const[tab,setTab]=useState('dashboard');
+  const[aiubId,setAiubId]=useLS('ap_aiub_id','');
+  const[doneById,setDoneById]=useLS('ap_done_by_id',{});
+  const[anonDone,setAnonDone]=useLS('ap_done_anon',[]);
+  const[done,setDone]=useState([]);
+  const[off,setOff]=useLS('ap_off',[]);
+  const[exm,setExm]=useLS('ap_exm',[]);
+  const[hist,setHist]=useLS('ap_hist',[]);// historical faculty sections
+  const[ofn,setOfn]=useLS('ap_ofn','');
+  const[efn,setEfn]=useLS('ap_efn','');
+  const[histFiles,setHistFiles]=useLS('ap_hf',[]);
+  const[examType,setExamType]=useLS('ap_et','mid');// mid or final
+  const[reapplyRoutine,setReapplyRoutine]=useState(null);
+  const DONE_TTL_MS=72*60*60*1000;
+  const idOk=useCallback(id=>/^\d{2}-\d{5}-\d$/.test(String(id||'').trim()),[]);
+
+  useEffect(()=>{
+    const id=String(aiubId||'').trim();
+    if(!idOk(id)){setDone(Array.isArray(anonDone)?anonDone:[]);return}
+    const rec=doneById[id];
+    if(rec&&Date.now()-(+rec.ts||0)<=DONE_TTL_MS){
+      setDone(Array.isArray(rec.done)?rec.done:[]);
+      return;
+    }
+    setDone([]);
+    if(rec)setDoneById(p=>{const n={...p};delete n[id];return n});
+  },[aiubId,doneById,idOk,anonDone]);
+
+  const clearCurrentIdData=useCallback(()=>{
+    const id=String(aiubId||'').trim();
+    if(!idOk(id)){setDone([]);setAnonDone([]);return}
+    setDone([]);
+    setDoneById(p=>{const n={...p};delete n[id];return n});
+  },[aiubId,idOk,setAnonDone]);
+  const idState=useMemo(()=>{
+    const id=String(aiubId||'').trim();
+    const valid=idOk(id);
+    if(!valid)return{valid:false,expiresIn:'-',lastSynced:'-'};
+    const rec=doneById[id];
+    if(!rec||!rec.ts)return{valid:true,expiresIn:'72h 0m',lastSynced:'Not synced yet'};
+    const left=Math.max(0,DONE_TTL_MS-(Date.now()-(+rec.ts||0)));
+    const h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000);
+    return{valid:true,expiresIn:`${h}h ${m}m`,lastSynced:new Date(rec.ts).toLocaleString()};
+  },[aiubId,doneById,idOk]);
+
+  const tog=useCallback(c=>setDone(p=>{
+    const next=p.includes(c)?p.filter(x=>x!==c):[...p,c];
+    const id=String(aiubId||'').trim();
+    if(idOk(id))setDoneById(prev=>({...prev,[id]:{done:next,ts:Date.now()}}));
+    else setAnonDone(next);
+    return next;
+  }),[aiubId,idOk,setDoneById,setAnonDone]);
+  const all=useMemo(ac,[]);
+  const dcr=useMemo(()=>all.filter(c=>done.includes(c.code)).reduce((s,c)=>s+c.cr,0),[done]);
+  const pct=Math.round(dcr/TC*100);
+  const pok=useCallback(code=>{const c=all.find(x=>x.code===code);return(!c||!c.p||c.p.length===0||c.p.every(p=>done.includes(p)))},[done]);
+  const unlk=useMemo(()=>all.filter(c=>!done.includes(c.code)&&pok(c.code)&&!c.t),[done,pok]);
+  const facMap=useMemo(()=>buildFacultyMap(hist),[hist]);
+
+  // Effective exam schedule (reversed for final)
+  const effExam=useMemo(()=>{
+    if(examType==='final'&&exm.length>0){
+      const rev=[...exm].reverse();
+      return rev.map((d,i)=>({...d,day:`Day ${i+1}`,origDay:d.day}));
+    }
+    return exm;
+  },[exm,examType]);
+
+  const hOff=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'array'});const p=parseXLSX(wb);setOff(p.sections);setOfn(f.name)}catch(err){alert('Error: '+err.message)}};r.readAsArrayBuffer(f)};
+
+  const hExm=async(e)=>{
+    const f=e.target.files[0];if(!f)return;
+    try{
+      const parsed=await parseExamPDF(f);
+      if(parsed.length>0){setExm(parsed);setEfn(f.name)}
+      else alert('Could not parse exam schedule from PDF. The PDF format may not be supported.');
+    }catch(err){alert('PDF parse error: '+err.message)}
+  };
+
+  const hHist=e=>{
+    const files=[...e.target.files];if(!files.length)return;
+    let allSections=[...hist];
+    let names=[...histFiles];
+    let processed=0;
+    files.forEach(f=>{
+      const r=new FileReader();
+      r.onload=ev=>{
+        try{
+          const wb=XLSX.read(ev.target.result,{type:'array'});
+          const p=parseXLSX(wb);
+          const withFac=p.sections.filter(s=>s.faculty);
+          allSections=[...allSections,...withFac];
+          names.push({name:f.name,sem:p.semester,count:withFac.length});
+        }catch{}
+        processed++;
+        if(processed===files.length){setHist(allSections);setHistFiles(names)}
+      };
+      r.readAsArrayBuffer(f);
+    });
+  };
+
+  return(<div style={{display:'flex',flexDirection:'column',minHeight:'100vh'}}>
+    <div className="top">
+      <div className="logo">AIUB Planner</div><div className="logo-s">B.Sc. Data Science</div>
+      <div className="nav">
+        {[['dashboard','Dashboard'],['prereq','Prereq Map'],['planner','Planner'],['routine','Routine'],['forecast','Forecast'],['bookmarks','Bookmarks'],['progress','Progress']].map(([k,l])=>
+          <button key={k} className={`nb ${tab===k?'on':''}`} onClick={()=>setTab(k)}>{l}</button>)}
+      </div>
+    </div>
+    <div className="cnt">
+      {tab==='dashboard'&&<Dash {...{done,tog,dcr,pct,unlk,off,ofn,efn,hOff,hExm,setTab,exm,hist,histFiles,hHist,effExam,examType,setExamType,aiubId,setAiubId,clearCurrentIdData,idState}}/>}
+      {tab==='prereq'&&<PMap {...{done,tog,pok}}/>}
+      {tab==='planner'&&<Plan {...{done,tog,pok,unlk}}/>}
+      {tab==='routine'&&<Rout {...{done,off,effExam,pok,unlk,ofn,hOff,efn,hExm,facMap,examType,setExamType,hist,histFiles,hHist,exm,reapplyRoutine,setReapplyRoutine,aiubId}}/>}
+      {tab==='forecast'&&<Forecast {...{off,facMap,histFiles}}/>}
+      {tab==='bookmarks'&&<Bookmarks {...{setTab,setReapplyRoutine}}/>}
+      {tab==='progress'&&<Prog {...{done,tog,dcr,pct}}/>}
+    </div>
+  </div>);
+}
+
+// ═══ DASHBOARD ═══
+function Dash({done,tog,dcr,pct,unlk,off,ofn,efn,hOff,hExm,setTab,exm,hist,histFiles,hHist,effExam,examType,setExamType,aiubId,setAiubId,clearCurrentIdData,idState}){
+  const all=ac();const dn=all.filter(c=>done.includes(c.code)).length;const est=Math.ceil((TC-dcr)/15)||0;
+  return(<div className="an">
+    <div className="g4" style={{marginBottom:16}}>
+      <div className="cd" style={{background:'linear-gradient(135deg,rgba(79,156,247,.06),rgba(99,102,241,.06))'}}><div className="st"><div className="stn" style={{color:'var(--ac)'}}>{pct}%</div><div className="stl">Progress</div></div><div className="pb" style={{height:8,borderRadius:4}}><div className="pf" style={{width:`${pct}%`,background:'linear-gradient(90deg,var(--ac),var(--ac3))'}}/></div></div>
+      <div className="cd"><div className="st"><div className="stn" style={{color:'var(--gn)'}}>{dcr}</div><div className="stl">Credits / {TC}</div></div></div>
+      <div className="cd"><div className="st"><div className="stn" style={{color:'var(--yw)'}}>{unlk.length}</div><div className="stl">Unlocked</div></div></div>
+      <div className="cd"><div className="st"><div className="stn" style={{color:'var(--pk)'}}>{est}</div><div className="stl">Semesters Left</div></div></div>
+    </div>
+    <div className="g2">
+      <div className="cd">
+        <div className="ct">📁 Data Files</div>
+        <div className="cs">All files stored locally in your browser. No server costs.</div>
+        <div style={{marginBottom:14,padding:10,border:'1px solid var(--bd)',borderRadius:'var(--r)',background:'var(--bg)'}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:6}}>AIUB ID (72h prereq save)</div>
+          <div style={{display:'flex',gap:6,alignItems:'center'}}>
+            <input className="inp" placeholder="26-63931-1" value={aiubId} onChange={e=>setAiubId(e.target.value)} style={{maxWidth:180}}/>
+            <button className="btn bs bgh" onClick={clearCurrentIdData}>Clear ID Data</button>
+          </div>
+          <div style={{fontSize:10.5,color:'var(--t3)',marginTop:4}}>Use format: XX-XXXXX-X. This ID keeps your prereq done list for 72 hours.</div>
+          <div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:5,fontSize:10.5}}>
+            <span>Status: {idState?.valid?<span className="b bgb">Valid</span>:<span className="b brb">Invalid</span>}</span>
+            <span style={{color:'var(--t3)'}}>Expires in: {idState?.expiresIn||'-'}</span>
+            <span style={{color:'var(--t3)'}}>Last synced: {idState?.lastSynced||'-'}</span>
+          </div>
+        </div>
+        <div style={{marginBottom:14}}><div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Current Semester Offered Courses (.xlsx/.xls)</div>
+          <div className={`uz ${ofn?'ok':''}`}><input type="file" accept=".xlsx,.xls,.csv" onChange={hOff}/>{ofn?<div><div style={{fontSize:20}}>✅</div><div style={{fontWeight:600,color:'var(--gn)',fontSize:13}}>{ofn}</div><div style={{fontSize:11,color:'var(--t3)'}}>({off.length} sections) click to replace</div></div>:<div><div style={{fontSize:28}}>📊</div><div style={{fontWeight:500,fontSize:13}}>Upload Offered Course Report</div></div>}</div>
+        </div>
+        <div style={{marginBottom:14}}><div style={{display:'flex',gap:6,fontSize:12,fontWeight:600,marginBottom:5}}>Exam Schedule (.pdf) <span className="b byb">Optional</span></div>
+          <div className={`uz ${efn?'ok':''}`}><input type="file" accept=".pdf" onChange={hExm}/>{efn?<div><div style={{fontSize:20}}>✅</div><div style={{fontWeight:600,color:'var(--gn)',fontSize:13}}>{efn}</div><div style={{fontSize:11,color:'var(--t3)'}}>({exm.length} exam days) click to replace</div></div>:<div><div style={{fontSize:28}}>📄</div><div style={{fontWeight:500,fontSize:13}}>Upload Mid/Final Exam PDF</div></div>}</div>
+          {efn&&<div style={{display:'flex',gap:6,marginTop:6}}>
+            <button className={`btn bs ${examType==='mid'?'bp':''}`} onClick={()=>setExamType('mid')}>Mid-Term (as-is)</button>
+            <button className={`btn bs ${examType==='final'?'bp':''}`} onClick={()=>setExamType('final')}>Final (reversed)</button>
+          </div>}
+        </div>
+        <div><div style={{display:'flex',gap:6,fontSize:12,fontWeight:600,marginBottom:5}}>Historical Offered Files (for faculty prediction) <span className="b bcb">Forecast</span></div>
+          <div className={`uz ${histFiles.length?'ok':''}`}><input type="file" accept=".xlsx,.xls" multiple onChange={hHist}/>{histFiles.length?<div><div style={{fontSize:20}}>✅</div><div style={{fontWeight:600,color:'var(--gn)',fontSize:13}}>{histFiles.length} files loaded</div><div style={{fontSize:11,color:'var(--t3)'}}>({hist.length} faculty records) click to add more</div></div>:<div><div style={{fontSize:28}}>📚</div><div style={{fontWeight:500,fontSize:13}}>Upload past semester XLSX files</div><div style={{fontSize:11,color:'var(--t3)'}}>Mid-week files preferred (have faculty names)</div></div>}</div>
+          {histFiles.length>0&&<div style={{marginTop:6,fontSize:11,color:'var(--t3)'}}>
+            {histFiles.map((f,i)=><div key={i}>• {f.name} — {f.count} faculty records</div>)}
+            <button className="btn bs brd" style={{marginTop:4}} onClick={()=>{setHist([]);setHistFiles([])}}>Clear History</button>
+          </div>}
+        </div>
+      </div>
+      <div>
+        <div className="cd"><div className="ct">🔓 Unlocked ({unlk.length})</div><div style={{maxHeight:200,overflowY:'auto'}}>
+          {unlk.length===0?<div className="emp" style={{padding:20}}>All done! 🎓</div>:unlk.map(c=><div key={c.code} style={{display:'flex',justifyContent:'space-between',padding:'4px 0',borderBottom:'1px solid var(--bd)',fontSize:12.5}}><span><span style={{fontFamily:'var(--m)',color:SC[c.s-1],marginRight:6}}>{c.code}</span>{c.n}</span><span className="b bb">{c.cr}cr</span></div>)}
+        </div></div>
+        <div className="cd"><div className="ct">⚡ Quick Actions</div><div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+          <button className="btn bp" onClick={()=>setTab('planner')}>Plan Semester</button>
+          <button className="btn bg2" onClick={()=>setTab('routine')}>Build Routine</button>
+          <button className="btn" onClick={()=>setTab('prereq')}>Prereq Map</button>
+          <button className="btn brd" onClick={()=>{if(confirm('Clear ALL data?')){localStorage.clear();location.reload()}}}>Reset All</button>
+        </div></div>
+      </div>
+    </div>
+  </div>);
+}
+
+// ═══ PREREQ MAP ═══
+function PMap({done,tog,pok}){
+  const[hov,setH]=useState(null);const[tip,setT]=useState(null);const all=ac();
+  const gs=SM.map(s=>({s:s.s,c:s.c}));
+  const nW=150,nH=40,gX=190,gY=52,pX=30,pY=50;
+  const mx=Math.max(...gs.map(g=>g.c.length));const svgW=gs.length*gX+pX*2,svgH=mx*gY+pY*2+25;
+  const pos={};gs.forEach((g,si)=>{const x=pX+si*gX;const tH=g.c.length*gY;const sY=pY+(mx*gY-tH)/2+18;g.c.forEach((c,ci)=>{pos[c.code]={x,y:sY+ci*gY,s:g.s}})});
+  const edges=[];all.forEach(c=>(c.p||[]).forEach(p=>{if(pos[p]&&pos[c.code])edges.push({f:p,t:c.code})}));
+  const chain=useMemo(()=>{if(!hov)return new Set();const s=new Set([hov]);const c=all.find(x=>x.code===hov);if(c)(c.p||[]).forEach(p=>s.add(p));all.forEach(x=>{if((x.p||[]).includes(hov))s.add(x.code)});return s},[hov]);
+  return(<div className="an"><div className="cd">
+    <div className="ct">🗺️ Prerequisite Map</div><div className="cs"><span style={{color:'var(--gn)'}}>● Done</span> · <span style={{color:'var(--ac)'}}>● Unlocked</span> · <span style={{color:'var(--t4)'}}>● Locked</span> — Click to toggle</div>
+    <div className="mm" style={{height:'72vh'}}><svg width={svgW} height={svgH} viewBox={`0 0 ${svgW} ${svgH}`}>
+      <defs><marker id="a" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--t4)"/></marker><marker id="ah" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ac)"/></marker></defs>
+      {gs.map((g,i)=><text key={i} x={pX+i*gX+nW/2} y={14} textAnchor="middle" fill={SC[i]} fontSize="11" fontWeight="700">Sem {g.s}</text>)}
+      {edges.map((e,i)=>{const f=pos[e.f],t=pos[e.t];if(!f||!t)return null;const ic=chain.has(e.f)&&chain.has(e.t);return<line key={i} x1={f.x+nW} y1={f.y+nH/2} x2={t.x} y2={t.y+nH/2} stroke={ic?'var(--ac)':'var(--bd)'} strokeWidth={ic?1.5:.6} markerEnd={ic?'url(#ah)':'url(#a)'} opacity={ic?1:.25}/>})}
+      {Object.entries(pos).map(([code,p])=>{const c=all.find(x=>x.code===code);if(!c)return null;const d=done.includes(code),can=pok(code),ih=chain.has(code);
+        let fl=d?'rgba(16,185,129,.18)':can?'rgba(79,156,247,.08)':'var(--b3)',sk=d?'var(--gn)':can?'var(--ac)':'var(--bd)',tc=d?'var(--gn)':can?'var(--t1)':'var(--t4)';
+        if(ih&&!d){sk='var(--yw)';fl='rgba(245,158,11,.06)'}
+        return<g key={code} style={{cursor:'pointer'}} onClick={()=>tog(code)} onMouseEnter={e=>{setT({x:e.clientX+14,y:e.clientY-10,c});setH(code)}} onMouseLeave={()=>{setT(null);setH(null)}}>
+          <rect x={p.x} y={p.y} width={nW} height={nH} rx="5" fill={fl} stroke={sk} strokeWidth={ih?1.5:.8}/><text x={p.x+6} y={p.y+14} fill={tc} fontSize="9" fontWeight="600">{code}</text><text x={p.x+6} y={p.y+28} fill={tc} fontSize="7" opacity=".8">{c.n.length>22?c.n.slice(0,22)+'…':c.n}</text><text x={p.x+nW-6} y={p.y+14} fill={SC[p.s-1]} fontSize="8" textAnchor="end">{c.cr}cr</text>
+          {d&&<text x={p.x+nW-6} y={p.y+30} fontSize="10" textAnchor="end" fill="var(--gn)">✓</text>}{!d&&!can&&<text x={p.x+nW-6} y={p.y+30} fontSize="9" textAnchor="end" fill="var(--t4)">🔒</text>}
+        </g>})}
+    </svg></div>
+  </div>{tip&&<div className="tip" style={{left:tip.x,top:tip.y}}><div style={{fontWeight:700,color:'var(--ac)',fontFamily:'var(--m)'}}>{tip.c.code}</div><div>{tip.c.n}</div><div style={{color:'var(--t3)',marginTop:3,fontSize:11}}>Credits: {tip.c.cr} | Sem {tip.c.s}</div>{tip.c.p?.length>0&&<div style={{color:'var(--yw)',marginTop:2,fontSize:11}}>Prereqs: {tip.c.p.join(', ')}</div>}</div>}
+  </div>);
+}
+
+// ═══ PLANNER ═══
+function Plan({done,tog,pok,unlk}){
+  const[cr,setCr]=useState(15);const[show,setShow]=useState(false);const all=ac();
+  const plan=useMemo(()=>{const rem=all.filter(c=>!done.includes(c.code));const dn=new Set(done);const res=[];let sf=0;
+    while(rem.filter(c=>!dn.has(c.code)).length>0&&sf<20){sf++;const can=rem.filter(c=>!dn.has(c.code)&&(!c.p||c.p.length===0||c.p.every(p=>dn.has(p)))).sort((a,b)=>a.s-b.s);const pk=[];let tot=0;for(const c of can){if(tot+c.cr<=cr){pk.push(c);tot+=c.cr}}if(!pk.length)break;res.push({courses:pk,cr:tot});pk.forEach(c=>dn.add(c.code))}return res},[done,cr]);
+  return(<div className="an">
+    <div className="cd"><div className="ct">📋 Semester Planner</div><div style={{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}}><span style={{fontSize:13,color:'var(--t2)'}}>Credits/sem:</span>
+      {[12,13,14,15,16,17,18].map(n=><button key={n} className={`btn bs ${cr===n?'bp':''}`} onClick={()=>setCr(n)}>{n}</button>)}
+      <button className={`btn bs ${show?'bp':''}`} style={{marginLeft:'auto'}} onClick={()=>setShow(!show)}>{show?'Hide':'Show'} Check-in</button>
+    </div></div>
+    {show&&<div className="cd an"><div className="ct">✅ Mark Completed</div><div style={{maxHeight:400,overflowY:'auto'}}>
+      {SM.map(s=><div key={s.s} style={{marginBottom:12}}><div style={{display:'flex',gap:8,alignItems:'center',marginBottom:3}}><span style={{fontSize:12,fontWeight:700,color:SC[s.s-1]}}>Sem {s.s}</span><button className="btn bs bgh" onClick={()=>s.c.forEach(c=>{if(!done.includes(c.code))tog(c.code)})}>All</button><button className="btn bs bgh" onClick={()=>s.c.forEach(c=>{if(done.includes(c.code))tog(c.code)})}>None</button></div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:1}}>{s.c.map(c=><label key={c.code} className={`chk ${done.includes(c.code)?'dn':''}`}><input type="checkbox" checked={done.includes(c.code)} onChange={()=>tog(c.code)}/><span style={{fontSize:12}}><b style={{fontFamily:'var(--m)'}}>{c.code}</b> {c.n} <span className="b bb">{c.cr}</span></span></label>)}</div>
+      </div>)}
+    </div></div>}
+    {unlk.length>0&&<div className="cd an"><div className="ct">🔓 Unlocked ({unlk.reduce((s,c)=>s+c.cr,0)} cr)</div><div style={{display:'flex',flexWrap:'wrap',gap:4}}>{unlk.map(c=><span key={c.code} className="b bgb" style={{padding:'4px 8px',fontSize:12}}>{c.code} ({c.cr})</span>)}</div></div>}
+    <div className="ct" style={{margin:'8px 0 12px'}}>📅 Plan — {cr} cr/sem</div>
+    {plan.length===0?<div className="cd"><div className="emp">All done! 🎉</div></div>
+    :<div className="g2">{plan.map((s,i)=><div key={i} className="cd" style={{borderLeft:`3px solid ${SC[i%8]}`,padding:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}><span style={{fontWeight:700}}>Semester {i+1}</span><span className="b bb">{s.cr} cr</span></div>
+      {s.courses.map(c=><div key={c.code} style={{display:'flex',justifyContent:'space-between',padding:'4px 0',borderBottom:'1px solid var(--bd)',fontSize:12.5}}>
+        <div><span style={{fontFamily:'var(--m)',color:SC[(c.s-1)%8],marginRight:6,fontWeight:600}}>{c.code}</span>{c.n}{c.t&&<span className="b bpkb" style={{marginLeft:6}}>{c.t}</span>}</div><span className="b bb">{c.cr}</span>
+      </div>)}</div>)}</div>}
+  </div>);
+}
+
+// ═══ ROUTINE ═══
+function Rout({done,off,effExam,pok,unlk,ofn,hOff,efn,hExm,facMap,examType,setExamType,hist,histFiles,hHist,exm,reapplyRoutine,setReapplyRoutine,aiubId}){
+  const[sel,setSel]=useState([]);const[pd,setPd]=useState(['Sunday','Monday','Tuesday','Wednesday','Thursday']);
+  const[ps,setPs]=useState('8:00 AM');const[pe,setPe]=useState('8:00 PM');const[ce,setCe]=useState(true);
+  const[combos,setCombos]=useState([]);const[srch,setSrch]=useState('');const[gen,setGen]=useState(false);
+  const[visCount,setVisCount]=useState(30);
+  const[filter,setFilter]=useState({open:true,closed:false,reserved:false,cancel:false,freshman:false});
+  const[fixedSec,setFixedSec]=useState({});
+  const[minSeatLeft,setMinSeatLeft]=useState(0);
+  const[sortByGap,setSortByGap]=useState(true);
+  const all=ac();
+  const applyFilter=useCallback((sections)=>{
+    const anyOn=Object.values(filter).some(Boolean);
+    if(!anyOn)return sections;
+    return sections.filter(s=>{
+      const st=String(s.status||'').trim().toLowerCase();
+      if(filter.open&&st==='open')return true;
+      if(filter.closed&&st==='closed')return true;
+      if(filter.reserved&&st==='reserved')return true;
+      if(filter.cancel&&st==='cancel')return true;
+      if(filter.freshman&&st==='freshman')return true;
+      return false;
+    });
+  },[filter]);
+  const secSeatLeft=useCallback(s=>{
+    const cap=+s.capacity||0;
+    if(!cap)return 999;
+    return cap-(+s.count||0);
+  },[]);
+  // Raw offered sections (ignores status filter) — used for "is offered?" and selection enablement
+  const gsr=useCallback(c=>mc(c,off),[off]);
+  // Filtered sections (respects Open/Closed/Reserved) — used for routine generation and counts
+  const gsf=useCallback(c=>applyFilter(gsr(c)).filter(s=>secSeatLeft(s)>=minSeatLeft),[gsr,applyFilter,secSeatLeft,minSeatLeft]);
+  const filt=unlk.filter(c=>{if(!srch)return true;const s=srch.toLowerCase();return c.code.toLowerCase().includes(s)||c.n.toLowerCase().includes(s)});
+  const tSel=c=>{setSel(p=>{if(p.includes(c)){setFixedSec(f=>{const n={...f};delete n[c];return n});return p.filter(x=>x!==c)}return[...p,c]});setCombos([])};
+  const scr=sel.reduce((s,code)=>{const c=all.find(x=>x.code===code);return s+(c?c.cr:0)},0);
+  const auto=(target)=>{const pk=[];let cr=0;for(const c of[...unlk].sort((a,b)=>a.s-b.s)){if(cr+c.cr<=target&&gsf(c).length>0){pk.push(c.code);cr+=c.cr}}setSel(pk);setCombos([])};
+
+  const checkExamClash=(items)=>{
+    if(!ce||effExam.length===0)return[];
+    const slots={};const clashes=[];
+    for(const it of items){
+      const n=norm(it.n);
+      for(const day of effExam){for(const s of day.slots||[]){
+        for(const ec of s.courses||[]){
+          if(norm(ec).includes(n)||n.includes(norm(ec))){
+            const k=`${day.day}-${s.time}`;
+            if(slots[k])clashes.push({a:slots[k],b:it.n,slot:{day:day.day,date:day.date,time:s.time}});
+            slots[k]=it.n;
+          }
+        }
+      }}
+    }
+    return clashes;
+  };
+
+  const generate=()=>{setGen(true);setTimeout(()=>{
+    const cs=sel.map(code=>{const c=all.find(x=>x.code===code);if(!c)return null;let secs=gsf(c);const fx=fixedSec[code];
+      if(fx)secs=secs.filter(s=>String(s.id)===String(fx));
+      const pf=secs.filter(s=>s.schedules.every(sc=>pd.includes(sc.day)&&pt(sc.start)>=pt(ps)&&pt(sc.end)<=pt(pe)));
+      secs=pf.length>0?pf:secs;return{code,n:c.n,cr:c.cr,secs:secs.slice(0,10)}}).filter(Boolean);
+    const noS=cs.filter(c=>c.secs.length===0);
+    if(noS.length){alert('No sections for: '+noS.map(c=>c.code).join(', '));setGen(false);return}
+    const res=[];
+    function bt(idx,cur){if(res.length>=100||idx===cs.length){
+      if(idx===cs.length){const aS=[];let cl=false;for(const it of cur){for(const sc of it.sec.schedules){for(const ex of aS){if(ex.day===sc.day&&tovl(ex,sc)){cl=true;break}}if(cl)break;aS.push(sc)}if(cl)break}
+        if(!cl)res.push({items:[...cur],ec:checkExamClash(cur),cr:cur.reduce((s,c)=>s+c.cr,0)})}return}
+      for(const sec of cs[idx].secs){cur.push({code:cs[idx].code,n:cs[idx].n,cr:cs[idx].cr,sec});bt(idx+1,cur);cur.pop()}}
+    bt(0,[]);
+    res.sort((a,b)=>{
+      const ex=a.ec.length-b.ec.length;
+      if(ex!==0)return ex;
+      return sortByGap?(calcGap(a)-calcGap(b)):0;
+    });
+    setCombos(res);setGen(false)},50)};
+
+  const selectedCourses=useMemo(()=>sel.map(code=>all.find(c=>c.code===code)).filter(Boolean),[sel,all]);
+  const groupSecsByTiming=useCallback((sections)=>{
+    const mp={};
+    sections.forEach(s=>{
+      const key=[...s.schedules].sort((a,b)=>pt(a.start)-pt(b.start)).map(sc=>`${sc.day} ${sc.start}-${sc.end}`).join(' | ');
+      if(!mp[key])mp[key]=[];
+      mp[key].push(s);
+    });
+    return Object.entries(mp).map(([timing,items])=>({timing,items}));
+  },[]);
+  const compactTiming=useCallback((timing)=>{
+    return String(timing||'')
+      .replace(/Sunday/g,'Sun').replace(/Monday/g,'Mon').replace(/Tuesday/g,'Tue').replace(/Wednesday/g,'Wed').replace(/Thursday/g,'Thu').replace(/Friday/g,'Fri').replace(/Saturday/g,'Sat')
+      .replace(/\s*\|\s*/g,'  ·  ');
+  },[]);
+  useEffect(()=>{
+    if(!reapplyRoutine)return;
+    setCombos([reapplyRoutine]);
+    setSel((reapplyRoutine.items||[]).map(it=>it.code).filter(Boolean));
+    setReapplyRoutine(null);
+  },[reapplyRoutine,setReapplyRoutine]);
+  useEffect(()=>{setVisCount(30)},[combos]);
+
+  if(!off.length)return(<div className="an"><div className="cd" style={{maxWidth:600,margin:'40px auto',textAlign:'center'}}>
+    <div style={{fontSize:48,marginBottom:12}}>📊</div><div className="ct" style={{justifyContent:'center'}}>Upload Offered Course File</div>
+    <div className="uz" style={{maxWidth:400,margin:'0 auto'}}><input type="file" accept=".xlsx,.xls" onChange={hOff}/><div style={{fontSize:32}}>📁</div><div style={{fontWeight:500}}>Upload Offered Course XLSX</div></div>
+  </div></div>);
+
+  return(<div className="an"><div className="g2">
+    <div><div className="cd"><div className="ct">📚 Select Courses</div>
+      <input className="inp" placeholder="Search..." value={srch} onChange={e=>setSrch(e.target.value)} style={{marginBottom:8}}/>
+      <div style={{display:'flex',gap:4,marginBottom:8,flexWrap:'wrap'}}><span style={{fontSize:12,color:'var(--t3)',lineHeight:'26px'}}>Quick:</span>
+        {[12,13,14,15,16,17,18].map(n=><button key={n} className="btn bs" onClick={()=>auto(n)}>{n}cr</button>)}
+        <button className="btn bs brd" onClick={()=>{setSel([]);setCombos([])}}>Clear</button>
+      </div>
+      <div style={{maxHeight:400,overflowY:'auto'}}>
+        {filt.map(c=>{const raw=gsr(c);const secs=gsf(c);const has=raw.length>0;const fPred=getFacultyPrediction(c.n,facMap);
+          return(<label key={c.code} className="chk" style={{opacity:has?1:.3,alignItems:'flex-start'}}>
+            <input type="checkbox" checked={sel.includes(c.code)} onChange={()=>tSel(c.code)} disabled={!has} title={!has?'Not offered in this semester':''} style={{marginTop:3}}/>
+            <div style={{flex:1}}>
+              <div style={{fontSize:12.5}}><b style={{fontFamily:'var(--m)',color:SC[(c.s-1)%8]}}>{c.code}</b> — {c.n} <span className="b bb">{c.cr}cr</span></div>
+              <div style={{fontSize:10.5,color:'var(--t3)'}}>
+                {has?`${raw.length} sections${secs.length!==raw.length?` (${secs.length} match filter)`:''}`:'Not in file'} | Sem {c.s}
+              </div>
+              {fPred.length>0&&<div style={{marginTop:2}}>{fPred.slice(0,3).map((f,i)=><span key={i} className="fac-tag">👤 {f.name} <span style={{opacity:.6}}>({f.count}x)</span></span>)}</div>}
+            </div>
+          </label>)})}
+      </div>
+    </div></div>
+    <div>
+      <div className="cd"><div className="ct">⚙️ Preferences</div>
+        <div style={{marginBottom:12}}><div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Days</div><div style={{display:'flex',flexWrap:'wrap',gap:3}}>{DO.map(d=><span key={d} className={`tag ${pd.includes(d)?'ton':'tof'}`} onClick={()=>setPd(p=>p.includes(d)?p.filter(x=>x!==d):[...p,d])}>{d.slice(0,3)}</span>)}</div></div>
+        <div style={{marginBottom:12}}><div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Time</div><div style={{display:'flex',gap:8,alignItems:'center'}}>
+          <select className="inp" value={ps} onChange={e=>setPs(e.target.value)} style={{width:110}}>{['7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM'].map(t=><option key={t}>{t}</option>)}</select>
+          <span style={{color:'var(--t4)'}}>→</span>
+          <select className="inp" value={pe} onChange={e=>setPe(e.target.value)} style={{width:110}}>{['3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM'].map(t=><option key={t}>{t}</option>)}</select>
+        </div></div>
+        <div style={{marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Section Status</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:3}}>
+            <span className={`tag ${filter.open?'ton':'tof'}`} onClick={()=>setFilter(p=>({...p,open:!p.open}))}>Open</span>
+            <span className={`tag ${filter.closed?'ton':'tof'}`} onClick={()=>setFilter(p=>({...p,closed:!p.closed}))}>Closed</span>
+            <span className={`tag ${filter.reserved?'ton':'tof'}`} onClick={()=>setFilter(p=>({...p,reserved:!p.reserved}))}>Reserved</span>
+            <span className={`tag ${filter.cancel?'ton':'tof'}`} onClick={()=>setFilter(p=>({...p,cancel:!p.cancel}))}>Cancel</span>
+            <span className={`tag ${filter.freshman?'ton':'tof'}`} onClick={()=>setFilter(p=>({...p,freshman:!p.freshman}))}>Freshman</span>
+          </div>
+        </div>
+        <div style={{marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Sort by Gaps?</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+            <span className={`tag ${sortByGap?'ton':'tof'}`} onClick={()=>setSortByGap(true)}>Minimize Gaps</span>
+            <span className={`tag ${!sortByGap?'ton':'tof'}`} onClick={()=>setSortByGap(false)}>No Preference</span>
+          </div>
+        </div>
+        <div style={{marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:5}}>Min Seat Left: {minSeatLeft}</div>
+          <input type="range" min="0" max="10" value={minSeatLeft} onChange={e=>setMinSeatLeft(+e.target.value)} style={{width:'100%'}}/>
+          <div style={{fontSize:11,color:'var(--t3)',marginTop:3}}>Open but nearly full sections can be excluded.</div>
+        </div>
+        <label className="chk" style={{marginBottom:8}}><input type="checkbox" checked={ce} onChange={()=>setCe(!ce)}/><span style={{fontSize:12.5}}>Exam clash check {effExam.length===0&&<span className="b byb">No PDF</span>} {examType==='final'&&<span className="b bob">Final mode</span>}</span></label>
+        {efn&&<div style={{display:'flex',gap:6,marginBottom:12}}><button className={`btn bs ${examType==='mid'?'bp':''}`} onClick={()=>setExamType('mid')}>Mid-Term</button><button className={`btn bs ${examType==='final'?'bp':''}`} onClick={()=>setExamType('final')}>Final (reversed)</button></div>}
+        <button className="btn bp" style={{width:'100%',padding:'10px 16px',fontSize:14}} onClick={generate} disabled={!sel.length||gen}>{gen?'Generating...':'🔄 Generate Routines'}</button>
+        {sel.length>0&&<div style={{marginTop:10,padding:10,background:'var(--bg)',borderRadius:'var(--r)',fontSize:12}}><div style={{fontWeight:600,marginBottom:5}}>Selected: {sel.length} courses, {scr} credits</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:3}}>{sel.map(c=><span key={c} className="b bpb" style={{cursor:'pointer',padding:'3px 7px'}} onClick={()=>tSel(c)}>{c}{fixedSec[c]?' 📌':''} ✕</span>)}</div>
+        </div>}
+        {selectedCourses.length>0&&<div style={{marginTop:10,padding:10,background:'var(--bg)',borderRadius:'var(--r)',fontSize:12,maxHeight:340,overflowY:'auto'}}>
+          <div style={{fontWeight:600,marginBottom:6}}>Fix Section (optional)</div>
+          {selectedCourses.map(c=>{
+            const groups=groupSecsByTiming(gsf(c));
+            return <div key={c.code} style={{marginBottom:10,padding:'8px 10px',border:'1px solid var(--bd)',borderLeft:`3px solid ${SC[(c.s-1)%8]}`,borderRadius:8,background:'var(--b2)'}}>
+              <div style={{display:'flex',justifyContent:'space-between',gap:8,alignItems:'center',marginBottom:6}}>
+                <div style={{fontWeight:600,lineHeight:1.25}}>{c.n}</div>
+                {fixedSec[c.code]?<span className="b bgb">📌 Fixed</span>:<span className="b bb">Auto</span>}
+              </div>
+              {groups.length===0?<div style={{fontSize:11,color:'var(--t3)'}}>No sections after current filters.</div>:groups.map((g,gi)=><div key={gi} style={{marginBottom:6}}>
+                <div style={{fontSize:10.5,color:'var(--t3)',marginBottom:3,fontFamily:'var(--m)'}}>{compactTiming(g.timing)}</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+                  {g.items.map(s=>{const seat=secSeatLeft(s);const isOn=String(fixedSec[c.code]||'')===String(s.id);return <span key={s.id} className={`tag ${isOn?'ton':'tof'}`} onClick={()=>setFixedSec(p=>({...p,[c.code]:String(s.id)}))}>{isOn?'◉':'○'} Sec {s.section} · {seat>=999?'?':seat}/{+s.capacity||0} · {s.status||'-'}</span>})}
+                </div>
+              </div>)}
+              <div style={{display:'flex',justifyContent:'flex-end',marginTop:2}}>
+                <button className="btn bs bgh" onClick={()=>setFixedSec(p=>{const n={...p};delete n[c.code];return n})}>↺ Auto pick</button>
+              </div>
+            </div>
+          })}
+        </div>}
+      </div>
+      <div className="cd"><div className="ct">📁 Files</div><div style={{fontSize:12}}>
+        <div style={{padding:'4px 0',borderBottom:'1px solid var(--bd)'}}>Offered: <span className="b bgb">{ofn} ({off.length})</span></div>
+        {efn&&<div style={{padding:'4px 0',borderBottom:'1px solid var(--bd)'}}>Exam: <span className="b bgb">{efn} ({exm.length}d)</span> <span className="b bob">{examType}</span></div>}
+        {histFiles.length>0&&<div style={{padding:'4px 0'}}>History: <span className="b bcb">{hist.length} faculty records</span></div>}
+      </div><div style={{display:'flex',gap:6,marginTop:8,flexWrap:'wrap'}}>
+        <label className="btn bs" style={{cursor:'pointer'}}>📊 Replace<input type="file" accept=".xlsx,.xls" onChange={hOff} style={{display:'none'}}/></label>
+        <label className="btn bs" style={{cursor:'pointer'}}>📄 Exam PDF<input type="file" accept=".pdf" onChange={hExm} style={{display:'none'}}/></label>
+        <label className="btn bs" style={{cursor:'pointer'}}>📚 History<input type="file" accept=".xlsx,.xls" multiple onChange={hHist} style={{display:'none'}}/></label>
+      </div></div>
+    </div>
+  </div>
+  {combos.length>0&&<div style={{marginTop:16}} className="an">
+    <div className="ct" style={{marginBottom:12}}>✅ {combos.length} Routine{combos.length!==1?'s':''} Found <span style={{fontWeight:400,fontSize:12,color:'var(--t3)'}}>Exam-safe first{examType==='final'?' (final reversed)':''}</span></div>
+    {combos.slice(0,visCount).map((c,i)=><CCard key={i} c={c} i={i} facMap={facMap} off={off} meta={{aiubId,semester:ofn}}/>)}
+    {combos.length>visCount&&<div style={{textAlign:'center',padding:16,color:'var(--t3)',fontSize:13}}>
+      {visCount} of {combos.length}
+      <div style={{marginTop:8,display:'flex',gap:8,justifyContent:'center'}}>
+        <button className="btn bs" onClick={()=>setVisCount(v=>Math.min(v+30,combos.length))}>Load 30 More</button>
+        <button className="btn bs bgh" onClick={()=>setVisCount(combos.length)}>Show All</button>
+      </div>
+    </div>}
+  </div>}
+  {combos.length===0&&sel.length>0&&!gen&&<div className="cd" style={{marginTop:16}}><div className="emp">Click Generate</div></div>}
+  </div>);
+}
+
+function CCard({c,i,facMap,off,meta}){
+  const[op,setOp]=useState(i===0);
+  const ds={};DO.forEach(d=>ds[d]=[]);
+  c.items.forEach((it,si)=>{it.sec.schedules.forEach(sc=>{if(ds[sc.day])ds[sc.day].push({...sc,code:it.code,n:it.n,section:it.sec.section,room:it.sec.room,type:it.sec.type,faculty:it.sec.faculty,capacity:it.sec.capacity,count:it.sec.count,status:it.sec.status,ci:si})})});
+  const ad=DO.filter(d=>ds[d].length>0);
+  const tm=c.items.reduce((s,it)=>s+it.sec.schedules.reduce((ss,sc)=>ss+(pt(sc.end)-pt(sc.start)),0),0);
+  const altSecsForSlot=useCallback((sl)=>{
+    const alts=(off||[]).filter(s=>{
+      if(norm(s.title)!==norm(sl.n))return false;
+      return (s.schedules||[]).some(sc=>sc.day===sl.day&&sc.start===sl.start&&sc.end===sl.end);
+    }).map(s=>{
+      const section=String(s.section||'').trim();
+      const cap=+s.capacity||0;
+      const cnt=+s.count||0;
+      const seat=cap?`${cnt}/${cap}`:'-';
+      return{section,status:String(s.status||'-'),seat};
+    }).filter(x=>x.section);
+    const dedup={};
+    alts.forEach(a=>{if(!dedup[a.section])dedup[a.section]=a});
+    return Object.values(dedup).sort((a,b)=>a.section.localeCompare(b.section));
+  },[off]);
+  const toRoutineText=useCallback(()=>{
+    const lines=[`Routine #${i+1} | ${c.cr}cr | ${Math.round(tm/60*10)/10}h`];
+    ad.forEach(day=>{
+      lines.push(`\n${day}:`);
+      ds[day].sort((a,b)=>pt(a.start)-pt(b.start)).forEach(sl=>{
+        const cap=+sl.capacity||0;const cnt=+sl.count||0;const seat=cap?`${cap-cnt}/${cap}`:'-';
+        lines.push(`- ${sl.n} [${sl.section}] | ${sl.start}-${sl.end} | Room ${sl.room} | ${sl.status||'-'} | Seats ${seat}`);
+      });
+    });
+    return lines.join('\n');
+  },[i,c,tm,ad,ds]);
+  const bookmarkRoutine=useCallback(()=>{
+    try{
+      const k='ap_bookmarked_routines';
+      const cur=JSON.parse(localStorage.getItem(k)||'[]');
+      cur.unshift({savedAt:new Date().toISOString(),data:c,text:toRoutineText()});
+      localStorage.setItem(k,JSON.stringify(cur.slice(0,80)));
+      alert('Bookmarked this routine.');
+    }catch{alert('Bookmark failed.')}
+  },[c,toRoutineText]);
+  const shareRoutine=useCallback(async()=>{
+    const txt=toRoutineText();
+    try{
+      if(navigator.share){await navigator.share({title:'AIUB Routine',text:txt});return;}
+    }catch{}
+    try{await navigator.clipboard.writeText(txt);alert('Routine copied. Share anywhere.')}catch{alert(txt)}
+  },[toRoutineText]);
+  const esc=useCallback(s=>String(s||'').replace(/[&<>"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])),[]);
+  const hashStr=useCallback((s)=>{
+    let h=2166136261>>>0;
+    for(let k=0;k<String(s).length;k++){h^=String(s).charCodeAt(k);h=Math.imul(h,16777619);}
+    return (h>>>0).toString(36);
+  },[]);
+  const bookmarkId=useMemo(()=>`bm-${hashStr(`${i}|${toRoutineText()}`).slice(0,10)}`,[i,toRoutineText,hashStr]);
+  const downloadImage=useCallback(()=>{
+    const days=ad.length?ad:DO.filter(d=>ds[d]&&ds[d].length);
+    const colW=300,gap=14,pad=24,headH=90;
+    const w=Math.max(980,pad*2+days.length*colW+(days.length-1)*gap);
+    const wrapLine=(txt,max=48)=>{
+      const out=[];let s=String(txt||'');
+      while(s.length>max){out.push(s.slice(0,max));s=s.slice(max)}
+      out.push(s);
+      return out;
+    };
+    const itemHeights=day=>(ds[day]||[]).sort((a,b)=>pt(a.start)-pt(b.start)).map(sl=>{
+      const alts=altSecsForSlot(sl).filter(a=>a.section!==String(sl.section||''));
+      const altTxt=alts.length?`Also: ${alts.map(a=>`${a.section} (${a.seat}, ${a.status})`).join(', ')}`:'';
+      const altLines=altTxt?wrapLine(altTxt,44).length:0;
+      return {sl,alts,altLines:Math.min(2,altLines),h:102+Math.min(2,altLines)*12};
+    });
+    const colsMeta=days.map(day=>itemHeights(day));
+    const colHeights=colsMeta.map(items=>70+items.reduce((s,it)=>s+it.h+10,0));
+    const h=headH+pad+Math.max(420,...colHeights)+30;
+    const header=`<rect x="${pad}" y="18" width="${w-pad*2}" height="66" rx="12" fill="#0f1a30" stroke="#28457a"/>
+      <text x="${pad+16}" y="44" font-size="24" fill="#7cc0ff" font-family="Inter,Segoe UI,sans-serif" font-weight="800">AIUB Planner • Class Routine #${i+1}</text>
+      <text x="${pad+16}" y="66" font-size="13" fill="#9db1d0" font-family="Inter,Segoe UI,sans-serif">${esc(meta?.semester||'Current Semester')} • ${esc(meta?.aiubId||'No ID')} • ${c.cr} credits • ${Math.round(tm/60*10)/10}h • ${c.ec.length?`${c.ec.length} clash`:'Exam-safe'}</text>`;
+    const cols=days.map((day,di)=>{
+      const x=pad+di*(colW+gap);
+      let y=headH;
+      let body=`<rect x="${x}" y="${y}" width="${colW}" height="${h-headH-pad}" rx="12" fill="#0f1a30" stroke="#243a63"/>`;
+      body+=`<text x="${x+14}" y="${y+28}" font-size="16" fill="#7cc0ff" font-family="Inter,Segoe UI,sans-serif" font-weight="700">${esc(day)}</text>`;
+      y+=44;
+      colsMeta[di].forEach((it)=>{
+        const sl=it.sl;
+        const cap=+sl.capacity||0,cnt=+sl.count||0,left=cap-cnt;
+        const clr=CC[sl.ci%CC.length];
+        const by=y;
+        body+=`<rect x="${x+10}" y="${by}" width="${colW-20}" height="${it.h}" rx="10" fill="#13213d" stroke="${clr}" stroke-width="1.2"/>`;
+        body+=`<text x="${x+20}" y="${by+24}" font-size="13" fill="${clr}" font-family="Inter,Segoe UI,sans-serif" font-weight="700">${esc(`${sl.n} [${sl.section}]`)}</text>`;
+        body+=`<text x="${x+20}" y="${by+44}" font-size="12" fill="#dce8fb" font-family="Inter,Segoe UI,sans-serif">${esc(`${sl.start} - ${sl.end} | Room ${sl.room}`)}</text>`;
+        body+=`<text x="${x+20}" y="${by+64}" font-size="12" fill="#9db1d0" font-family="Inter,Segoe UI,sans-serif">${esc(`Status: ${sl.status||'-'}`)}</text>`;
+        body+=`<text x="${x+20}" y="${by+84}" font-size="12" fill="${left===0?'#ef4444':(left<5?'#f59e0b':'#10b981')}" font-family="Inter,Segoe UI,sans-serif">${esc(`Seats: ${cap?`${left}/${cap}`:'-'}`)}</text>`;
+        if(it.alts.length){
+          const altTxt=`Also: ${it.alts.map(a=>`${a.section} (${a.seat}, ${a.status})`).join(', ')}`;
+          let lines=wrapLine(altTxt,44);
+          if(lines.length>2){
+            lines=[lines[0],`${lines[1].slice(0,Math.max(0,lines[1].length-3))}...`];
+          }
+          lines.forEach((ln,li)=>{
+            body+=`<text x="${x+20}" y="${by+104+li*12}" font-size="10.5" fill="#9db1d0" font-family="Inter,Segoe UI,sans-serif">${esc(ln)}</text>`;
+          });
+        }
+        y+=it.h+10;
+      });
+      return body;
+    }).join('');
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+      <rect width="100%" height="100%" fill="#0b1120"/>
+      ${header}
+      ${cols}
+      <text x="${pad}" y="${h-10}" font-size="11" fill="#6f87ad" font-family="Inter,Segoe UI,sans-serif">Generated by AIUB Planner • ${esc(bookmarkId)}</text>
+    </svg>`;
+    const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.fillStyle='#0b1120';
+      ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0);
+      canvas.toBlob(b=>{
+        if(!b){
+          const a=document.createElement('a');a.href=url;a.download=`routine-${i+1}.svg`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+          return;
+        }
+        const pngUrl=URL.createObjectURL(b);
+        const a=document.createElement('a');
+        a.href=pngUrl;
+        a.download=`routine-${i+1}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(()=>{URL.revokeObjectURL(pngUrl);URL.revokeObjectURL(url)},800);
+      },'image/png');
+    };
+    img.onerror=()=>{
+      const a=document.createElement('a');a.href=url;a.download=`routine-${i+1}.svg`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+    };
+    img.src=url;
+  },[i,c,tm,ad,ds,esc,bookmarkId,meta,altSecsForSlot]);
+  const downloadPdf=useCallback(()=>{
+    try{
+      const jsPDFRef=window.jspdf&&window.jspdf.jsPDF;
+      if(!jsPDFRef){alert('PDF library not loaded yet. Please try again.');return}
+      const doc=new jsPDFRef({unit:'pt',format:'a4'});
+      const txt=toRoutineText();
+      doc.setFont('courier','normal');
+      doc.setFontSize(10);
+      const lines=doc.splitTextToSize(txt,540);
+      let y=40;
+      doc.setFontSize(13);
+      doc.text(`AIUB Routine #${i+1}`,40,y);y+=18;
+      doc.setFontSize(10);
+      lines.forEach(line=>{
+        if(y>800){doc.addPage();y=40;}
+        doc.text(line,40,y);y+=14;
+      });
+      doc.save(`routine-${i+1}.pdf`);
+    }catch(err){
+      alert('PDF export failed: '+(err&&err.message?err.message:'Unknown error'));
+    }
+  },[toRoutineText,i]);
+  return(<div className="rc an">
+    <div className="rh" onClick={()=>setOp(!op)}><h4 style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',fontSize:13,fontWeight:600}}>
+      <span style={{color:'var(--ac)'}}>#{i+1}</span><span className="b bb">{c.cr}cr</span><span className="b bpb">{Math.round(tm/60*10)/10}h</span><span className="b bgb">{ad.length}d</span>
+      {c.ec.length?<span className="b brb">⚠ {c.ec.length} clash</span>:<span className="b bgb">✓ Safe</span>}
+    </h4><div style={{display:'flex',alignItems:'center',gap:6}}>
+      <button className="btn bs bgh" onClick={e=>{e.stopPropagation();bookmarkRoutine()}} title="Bookmark">🔖</button>
+      <button className="btn bs bgh" onClick={e=>{e.stopPropagation();downloadPdf()}} title="Download PDF">📄</button>
+      <button className="btn bs bgh" onClick={e=>{e.stopPropagation();downloadImage()}} title="Download Image">🖼️</button>
+      <button className="btn bs bgh" onClick={e=>{e.stopPropagation();shareRoutine()}} title="Share">🔗</button>
+      <span style={{color:'var(--t3)',fontSize:16}}>{op?'▲':'▼'}</span>
+    </div></div>
+    {op&&<div className="rb" style={{paddingTop:12}}>
+      <div style={{display:'flex',flexWrap:'wrap',gap:4,marginBottom:10}}>
+        {c.items.map((it,si)=>{const fPred=getFacultyPrediction(it.n,facMap);const hasFac=it.sec.faculty;
+          return<div key={si} style={{background:`${CC[si%CC.length]}12`,border:`1px solid ${CC[si%CC.length]}30`,padding:'4px 9px',borderRadius:5,fontSize:11}}>
+            <span style={{fontWeight:600,color:CC[si%CC.length]}}>{it.n} [{it.sec.section}]</span> Rm:{it.sec.room}
+            {hasFac&&<span style={{color:'var(--cy)',marginLeft:4}}>👤 {hasFac}</span>}
+            {!hasFac&&fPred.length>0&&<span style={{color:'var(--t3)',marginLeft:4}}>🔮 Likely: {fPred[0].name}</span>}
+          </div>})}
+      </div>
+      {c.ec.length>0&&<div style={{background:'rgba(239,68,68,.07)',border:'1px solid rgba(239,68,68,.2)',borderRadius:8,padding:10,marginBottom:10,fontSize:12}}>⚠️ <b>Exam Clash:</b>{c.ec.map((cl,j)=><div key={j} style={{marginTop:3}}><b>{cl.a}</b> ↔ <b>{cl.b}</b> — {cl.slot.day}, {cl.slot.date} ({cl.slot.time})</div>)}</div>}
+      <div style={{overflowX:'auto'}}><table className="tbl"><thead><tr><th style={{width:80}}>Day</th><th>Classes</th></tr></thead><tbody>
+        {ad.map(day=><tr key={day}><td style={{fontWeight:600,fontSize:12}}>{day}</td><td><div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+          {ds[day].sort((a,b)=>pt(a.start)-pt(b.start)).map((sl,j)=>{const cl=CC[sl.ci%CC.length];
+            const cap=+sl.capacity||0;
+            const cnt=+sl.count||0;
+            const seatLeft=cap-cnt;
+            const alts=altSecsForSlot(sl).filter(x=>x.section!==String(sl.section||''));
+            let color='green';
+            if(seatLeft<5)color='orange';
+            if(seatLeft===0)color='red';
+            return<div key={j} className="sblk" style={{borderColor:cl,background:`${cl}0d`}}>
+            <div style={{fontWeight:600,color:cl}}>{sl.n} [{sl.section}]</div><div>{sl.start} – {sl.end} | Rm {sl.room}</div>
+            {cap>0&&<div style={{fontSize:10,color}}>Seats: {seatLeft}/{cap}</div>}
+            {sl.status&&<div style={{fontSize:10}}>Status: {sl.status}</div>}
+            {alts.length>0&&<div style={{fontSize:10,color:'var(--t3)'}}>Also available: {alts.map(a=>`${a.section} (${a.seat}, ${a.status})`).join(', ')}</div>}
+            {sl.faculty&&<div style={{color:'var(--cy)',fontSize:10}}>👤 {sl.faculty}</div>}
+          </div>})}
+        </div></td></tr>)}
+      </tbody></table></div>
+    </div>}
+  </div>);
+}
+
+function Forecast({off,facMap,histFiles}){
+  const[q,setQ]=useState('');
+  const[secFilter,setSecFilter]=useState('all');
+  const rows=useMemo(()=>{
+    const seen=new Set();
+    const out=[];
+    for(const s of off){
+      const key=`${norm(s.title)}|${s.section}`;
+      if(seen.has(key))continue;
+      seen.add(key);
+      const pred=getFacultyPredictionForSection(s.title,s.section,facMap);
+      const conf=pred[0]?.confidence||0;
+      const total=pred[0]?.total||0;
+      let level='Low';
+      if(total>=3&&conf>=0.65)level='High';
+      else if(total>=2&&conf>=0.4)level='Medium';
+      out.push({title:s.title,section:s.section,status:s.status,pred,conf,total,level});
+    }
+    out.sort((a,b)=>a.title.localeCompare(b.title)||a.section.localeCompare(b.section));
+    return out;
+  },[off,facMap]);
+  const secOptions=useMemo(()=>['all',...Array.from(new Set(rows.map(r=>String(r.section||'').trim()).filter(Boolean))).sort()], [rows]);
+  const frows=useMemo(()=>{
+    const qn=q.trim().toLowerCase();
+    return rows.filter(r=>{
+      if(secFilter!=='all'&&String(r.section||'').trim()!==secFilter)return false;
+      if(!qn)return true;
+      return String(r.title||'').toLowerCase().includes(qn)||String(r.section||'').toLowerCase().includes(qn);
+    });
+  },[rows,q,secFilter]);
+
+  if(!off.length)return(<div className="cd"><div className="emp">Upload offered file first to see section forecast.</div></div>);
+  if(!histFiles.length)return(<div className="cd"><div className="emp">Upload historical files first to build faculty forecast.</div></div>);
+
+  return(<div className="an">
+    <div className="cd">
+      <div className="ct">🔮 Section-wise Faculty Forecast</div>
+      <div className="cs">Predicted from historical files. Section-wise history is prioritized; fallback uses course-wise history.</div>
+      <div className="g2" style={{marginBottom:10}}>
+        <input className="inp" placeholder="Course search..." value={q} onChange={e=>setQ(e.target.value)}/>
+        <select className="inp" value={secFilter} onChange={e=>setSecFilter(e.target.value)}>
+          {secOptions.map(s=><option key={s} value={s}>{s==='all'?'All sections':`Section ${s}`}</option>)}
+        </select>
+      </div>
+      <div style={{overflowX:'auto'}}>
+        <table className="tbl">
+          <thead><tr><th>Course</th><th style={{width:80}}>Section</th><th style={{width:100}}>Status</th><th style={{width:120}}>Confidence</th><th>Likely Faculty</th></tr></thead>
+          <tbody>
+            {frows.map((r,i)=><tr key={i}>
+              <td>{r.title}</td>
+              <td>{r.section||'-'}</td>
+              <td>{r.status||'-'}</td>
+              <td>{r.level==='High'?<span className="b bgb">High</span>:r.level==='Medium'?<span className="b byb">Medium</span>:<span className="b brb">Low</span>}</td>
+              <td>{r.pred.length?r.pred.slice(0,3).map((p,j)=><span key={j} className="fac-tag">{p.name} <span style={{opacity:.6}}>({p.count}x)</span></span>):<span style={{color:'var(--t3)'}}>No data</span>}</td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>);
+}
+
+function Bookmarks({setTab,setReapplyRoutine}){
+  const[items,setItems]=useLS('ap_bookmarked_routines',[]);
+  const[op,setOp]=useState(null);
+  const removeOne=idx=>setItems(p=>p.filter((_,i)=>i!==idx));
+  const clearAll=()=>{if(confirm('Clear all bookmarks?'))setItems([])};
+  const shareText=async txt=>{try{if(navigator.share){await navigator.share({title:'AIUB Routine',text:txt});return}}catch{};try{await navigator.clipboard.writeText(txt);alert('Copied')}catch{alert('Could not share')}};
+  const downloadText=(txt,name='bookmarked-routine.txt')=>{const b=new Blob([txt],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();URL.revokeObjectURL(a.href)};
+
+  return(<div className="an">
+    <div className="cd">
+      <div className="ct">🔖 Bookmarked Routines</div>
+      <div className="cs">Open, share, download, delete, or re-apply any saved routine.</div>
+      <div style={{display:'flex',gap:8,marginBottom:10}}>
+        <button className="btn bs brd" onClick={clearAll} disabled={!items.length}>Clear All</button>
+      </div>
+      {!items.length?<div className="emp">No bookmarks yet. Save from Routine cards.</div>:
+        <div>
+          {items.map((it,idx)=><div key={idx} className="rc" style={{marginBottom:8}}>
+            <div className="rh" onClick={()=>setOp(op===idx?null:idx)}>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <span className="b bb">#{idx+1}</span>
+                <span style={{fontSize:12}}>Saved: {new Date(it.savedAt).toLocaleString()}</span>
+              </div>
+              <div style={{display:'flex',gap:6}}>
+                <button className="btn bs bgh" onClick={e=>{e.stopPropagation();setReapplyRoutine(it.data);setTab('routine')}}>Apply</button>
+                <button className="btn bs bgh" onClick={e=>{e.stopPropagation();shareText(it.text||'')}}>Share</button>
+                <button className="btn bs bgh" onClick={e=>{e.stopPropagation();downloadText(it.text||'',`bookmark-${idx+1}.txt`)}}>Download</button>
+                <button className="btn bs brd" onClick={e=>{e.stopPropagation();removeOne(idx)}}>Delete</button>
+              </div>
+            </div>
+            {op===idx&&<div className="rb" style={{paddingTop:10}}>
+              <pre style={{whiteSpace:'pre-wrap',fontFamily:'var(--m)',fontSize:11,color:'var(--t2)'}}>{it.text||'No details'}</pre>
+            </div>}
+          </div>)}
+        </div>
+      }
+    </div>
+  </div>);
+}
+
+// ═══ PROGRESS ═══
+function Prog({done,tog,dcr,pct}){const all=ac();return(<div className="an">
+  <div className="cd" style={{background:'linear-gradient(135deg,rgba(79,156,247,.05),rgba(139,92,246,.05))'}}>
+    <div style={{display:'flex',alignItems:'center',gap:20,marginBottom:16}}>
+      <div style={{fontSize:52,fontWeight:700,fontFamily:'var(--m)',letterSpacing:-2,background:'linear-gradient(135deg,var(--ac),var(--ac3))',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>{pct}%</div>
+      <div><div style={{fontSize:15,fontWeight:600}}>{dcr}/{TC} credits</div><div style={{fontSize:13,color:'var(--t3)'}}>{all.filter(c=>done.includes(c.code)).length}/{all.length} courses</div></div>
+    </div>
+    <div className="pb" style={{height:12,borderRadius:6}}><div className="pf" style={{width:`${pct}%`,background:'linear-gradient(90deg,var(--gn2),var(--ac),var(--ac3))'}}/></div>
+  </div>
+  <div className="g2" style={{marginTop:8}}>
+    {SM.map(s=>{const sd=s.c.filter(c=>done.includes(c.code));const scr=sd.reduce((a,c)=>a+c.cr,0);const st=s.c.reduce((a,c)=>a+c.cr,0);const sp=st?Math.round(scr/st*100):0;
+      return<div key={s.s} className="cd" style={{borderLeft:`3px solid ${SC[s.s-1]}`}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}><span style={{fontWeight:700,color:SC[s.s-1]}}>Sem {s.s}</span><span className="b bb">{scr}/{st}cr ({sp}%)</span></div>
+        <div className="pb" style={{marginBottom:10}}><div className="pf" style={{width:`${sp}%`,background:SC[s.s-1]}}/></div>
+        {s.c.map(c=><label key={c.code} className={`chk ${done.includes(c.code)?'dn':''}`} style={{padding:'4px 8px'}}><input type="checkbox" checked={done.includes(c.code)} onChange={()=>tog(c.code)}/><span style={{fontSize:12}}><span style={{fontFamily:'var(--m)',color:SC[s.s-1],fontWeight:600}}>{c.code}</span> {c.n} <span className="b bb">{c.cr}</span></span></label>)}
+        <div style={{marginTop:6,display:'flex',gap:6}}><button className="btn bs bgh" onClick={()=>s.c.forEach(c=>{if(!done.includes(c.code))tog(c.code)})}>✓ All</button><button className="btn bs bgh" onClick={()=>s.c.forEach(c=>{if(done.includes(c.code))tog(c.code)})}>✕ None</button></div>
+      </div>})}
+  </div>
+</div>);}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>
